@@ -1,0 +1,9 @@
+#model training
+scikit-learn
+numpy
+pandas
+skl2onnx
+pydantic
+fastapi[standard]
+uvicorn
+onnxruntime
