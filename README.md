@@ -86,7 +86,6 @@ A production-ready REST API for fantasy football analytics:
 - SQLite database with SQLAlchemy ORM
 - Pydantic validation for request/response schemas
 - Comprehensive test coverage
-- Publicly accessible in GitHub Codespaces
 
 ### 2. Machine Learning Models
 
