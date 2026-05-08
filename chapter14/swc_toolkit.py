@@ -11,7 +11,7 @@ from langchain_core.tools import BaseTool, BaseToolkit
 # check to see if the swc SDK has been installed in the environment
 try:
     from swcpy import SWCClient
-    from swcpy.swc_client import League, Team
+    from swcpy.swc_client import League, Team, Player, Performance
 except ImportError:
     raise ImportError(
         "swcpy is not installed. Please install it."
@@ -129,14 +129,129 @@ class ListTeamsTool(BaseTool):
             league_id=league_id)
         return list_teams_response
 
+class CountsInput(BaseModel):
+    """Input for the GetCountsTool. Contains no required parameters."""
+    pass
+
+class GetCountsTool(BaseTool):
+    """The tool that will be used to call the SDK's get_counts() function."""
+    name: str = "GetCounts"
+    description: str = (
+        "Get counts of leagues, teams, and players from SportsWorldCentral. "
+        "Useful for understanding the size and scope of the available data."
+    )
+    args_schema: Type[CountsInput] = CountsInput
+    return_direct: bool = False
+    
+    def _run(
+        self, run_manager: Optional[CallbackManagerForToolRun] = None
+    ) -> str:
+        """Use the tool to get counts of data from SportsWorldCentral."""
+        counts_response = local_swc_client.get_counts()
+        return str(counts_response)
+
+class PlayersInput(BaseModel):
+    """Input for the ListPlayersTool. Contains optional player filter parameters."""
+    first_name: Optional[str] = Field(
+        default=None,
+        description="First name of the player to search for."
+    )
+    last_name: Optional[str] = Field(
+        default=None,
+        description="Last name of the player to search for."
+    )
+    position: Optional[str] = Field(
+        default=None,
+        description="Position of the player (e.g., QB, RB, WR, TE, K, DEF)."
+    )
+
+class ListPlayersTool(BaseTool):
+    """The tool that will be used to call the SDK's list_players() function."""
+    name: str = "ListPlayers"
+    description: str = (
+        "Get a list of NFL players from SportsWorldCentral. "
+        "Optionally filter by first name, last name, or position."
+    )
+    args_schema: Type[PlayersInput] = PlayersInput
+    return_direct: bool = False
+    
+    def _run(
+        self, first_name: Optional[str] = None,
+        last_name: Optional[str] = None,
+        position: Optional[str] = None,
+        run_manager: Optional[CallbackManagerForToolRun] = None
+    ) -> List[Player]:
+        """Use the tool to get a list of players from SportsWorldCentral."""
+        list_players_response = local_swc_client.list_players(
+            first_name=first_name,
+            last_name=last_name,
+            position=position
+        )
+        return list_players_response
+
+class PerformancesInput(BaseModel):
+    """Input for the ListPerformancesTool. Contains optional limit."""
+    limit: Optional[int] = Field(
+        default=100,
+        description="Limit the number of results returned. Default is 100."
+    )
+
+class ListPerformancesTool(BaseTool):
+    """The tool that will be used to call the SDK's list_performances() function."""
+    name: str = "ListPerformances"
+    description: str = (
+        "Get a list of NFL player performances with fantasy points from SportsWorldCentral. "
+        "Optionally limit the number of results."
+    )
+    args_schema: Type[PerformancesInput] = PerformancesInput
+    return_direct: bool = False
+    
+    def _run(
+        self, limit: Optional[int] = 100,
+        run_manager: Optional[CallbackManagerForToolRun] = None
+    ) -> List[Performance]:
+        """Use the tool to get performances from SportsWorldCentral."""
+        performances_response = local_swc_client.list_performances(
+            limit=limit
+        )
+        return performances_response
+
+class LeagueByIdInput(BaseModel):
+    """Input for the GetLeagueByIdTool. Requires a league ID."""
+    league_id: int = Field(
+        description="The numerical ID of the league to retrieve."
+    )
+
+class GetLeagueByIdTool(BaseTool):
+    """The tool that will be used to call the SDK's get_league_by_id() function."""
+    name: str = "GetLeagueById"
+    description: str = (
+        "Get a specific league by its ID from SportsWorldCentral. "
+        "Requires a numerical league ID."
+    )
+    args_schema: Type[LeagueByIdInput] = LeagueByIdInput
+    return_direct: bool = False
+    
+    def _run(
+        self, league_id: int,
+        run_manager: Optional[CallbackManagerForToolRun] = None
+    ) -> League:
+        """Use the tool to get a specific league by ID from SportsWorldCentral."""
+        league_response = local_swc_client.get_league_by_id(league_id=league_id)
+        return league_response
+
 class SportsWorldCentralToolkit(BaseToolkit):
     """subclass of BaseToolkit that defines the tools that will be used by the model. The get_tools() method returns a list of the tools that we have defined above."""
     def get_tools(self) -> List[BaseTool]:
         '''Return the list of tools in the toolkit.'''
         return [
             HealthCheckTool(),
+            GetCountsTool(),
             ListLeaguesTool(),
-            ListTeamsTool()
-        ] # instatiate the tools and return them in a list
+            GetLeagueByIdTool(),
+            ListTeamsTool(),
+            ListPlayersTool(),
+            ListPerformancesTool()
+        ] # instantiate the tools and return them in a list
 
 
