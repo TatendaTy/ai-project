@@ -33,6 +33,12 @@ app = FastAPI(
     description=api_description,
     title="Sports World Central (SWC) Fantasy Football API",
     version="0.2",
+    servers=[
+        {
+            "url": "https://supreme-space-giggle-g7765v6rgq9cp4x7-8000.app.github.dev",
+            "description": "Main server for SWC in Codespaces",
+        }
+    ],
 )
 
 

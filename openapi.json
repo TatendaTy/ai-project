@@ -1,0 +1,263 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Sports World Central API",
+        "version": "0.2"
+    },
+    "servers": [
+        {
+            "url": "https://supreme-space-giggle-g7765v6rgq9cp4x7-8000.app.github.dev"
+        }
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "summary": "Health Check",
+                "operationId": "health_check",
+                "responses": {
+                    "200": {
+                        "description": "API is running"
+                    }
+                }
+            }
+        },
+        "/v0/counts/": {
+            "get": {
+                "summary": "Get counts",
+                "operationId": "get_counts",
+                "responses": {
+                    "200": {
+                        "description": "Counts of leagues, teams, players, weeks"
+                    }
+                }
+            }
+        },
+        "/v0/leagues/": {
+            "get": {
+                "summary": "List leagues",
+                "operationId": "list_leagues",
+                "parameters": [
+                    {
+                        "name": "league_name",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of leagues"
+                    }
+                }
+            }
+        },
+        "/v0/leagues/{league_id}": {
+            "get": {
+                "summary": "Get league by ID",
+                "operationId": "get_league_by_id",
+                "parameters": [
+                    {
+                        "name": "league_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "League details"
+                    }
+                }
+            }
+        },
+        "/v0/teams/": {
+            "get": {
+                "summary": "List teams",
+                "operationId": "list_teams",
+                "parameters": [
+                    {
+                        "name": "team_name",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "league_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of teams"
+                    }
+                }
+            }
+        },
+        "/v0/players/": {
+            "get": {
+                "summary": "List players",
+                "operationId": "list_players",
+                "parameters": [
+                    {
+                        "name": "first_name",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "last_name",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "position",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of players"
+                    }
+                }
+            }
+        },
+        "/v0/players/{player_id}": {
+            "get": {
+                "summary": "Get player by ID",
+                "operationId": "get_player_by_id",
+                "parameters": [
+                    {
+                        "name": "player_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Player details"
+                    }
+                }
+            }
+        },
+        "/v0/performances/": {
+            "get": {
+                "summary": "List performances",
+                "operationId": "list_performances",
+                "parameters": [
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "minimum_last_changed_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of player performances"
+                    }
+                }
+            }
+        },
+        "/v0/weeks/": {
+            "get": {
+                "summary": "List weeks",
+                "operationId": "list_weeks",
+                "parameters": [
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of weeks"
+                    }
+                }
+            }
+        }
+    }
+}
