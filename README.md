@@ -221,13 +221,29 @@ Verify agent can:
 
 ## Screenshots & Validation
 
-*[Include screenshots of Foundry agent successfully calling SWC API endpoints]*
+### Custom Tool Creation
+
+The first step was creating a custom tool in Foundry to expose the SWC API endpoints:
+
+![Creating agent tool](creating%20agent%20tool-1.jpg)
+
+### Agent Setup in Foundry
+
+Once the tool was configured, we created the SWC Fantasy Football Agent with the `gpt-4o` model and bound the custom SportsWorldCentralAPI action:
+
+![Custom Agent successful tool creation](Custom%20Agent%20successful%20tool%20creation-2.png)
+
+### Agent in Action
+
+The agent successfully calls the API endpoints and returns structured data. Here the agent answers a query about teams in a fantasy league:
+
+![Testing the custom agent](Testing%20the%20custom%20agent-3.jpg)
 
 Example successful agent interaction:
 ```
-User: "What teams are in the league?"
-Agent: Calls GET /v0/teams/
-Result: Returns list of 20 teams with details
+User: "What teams are in Pigskin Prodigal Fantasy League?"
+Agent: Calls GET /v0/teams/ via the SportsWorldCentralAPI action
+Result: Returns list of 12 teams with details
 ```
 
 ## Skills Demonstrated
